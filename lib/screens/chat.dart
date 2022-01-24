@@ -22,6 +22,7 @@ class ChatScreen extends HookWidget {
     final ScrollController _scrollController = ScrollController();
     void send() {
       final displayName = FirebaseAuth.instance.currentUser?.displayName;
+      final email = FirebaseAuth.instance.currentUser?.email;
       final userId = FirebaseAuth.instance.currentUser?.uid;
       FirebaseFirestore.instance
           .collection('Chats')
@@ -30,7 +31,7 @@ class ChatScreen extends HookWidget {
           .add({
         "at": Timestamp.now(),
         "text": messageController.value.text,
-        "author": displayName,
+        "author": displayName ?? email,
         "authorId": userId
       });
       messageController.value = TextEditingValue.empty;
@@ -80,8 +81,10 @@ class ChatScreen extends HookWidget {
                     // );
 
                     return Message(
-                        text: data['text'].toString(),
-                        author: data['author'].toString());
+                      text: data['text'].toString(),
+                      author: data['author'].toString(),
+                      authorId: data['authorId'].toString(),
+                    );
                   }).toList(),
                 );
               },
