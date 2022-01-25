@@ -29,7 +29,7 @@ class ProfileDrawer extends StatelessWidget {
                         text: FirebaseAuth.instance.currentUser?.uid));
                   },
                   child: Text(
-                    FirebaseAuth.instance.currentUser?.uid ?? '',
+                    "uid: ${FirebaseAuth.instance.currentUser?.uid ?? ''}",
                     style: TextStyle(color: Colors.white60, fontSize: 12),
                   ),
                 ),

@@ -78,14 +78,14 @@ class Chats extends StatelessWidget {
                       },
                       title: Text(data['name']),
                       subtitle: Text(data['description']),
-                      trailing: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20))),
-                        width: 10,
-                        height: 10,
-                      ),
+                      // trailing: Container(
+                      //   decoration: BoxDecoration(
+                      //       color: Colors.white,
+                      //       borderRadius:
+                      //           BorderRadius.all(Radius.circular(20))),
+                      //   width: 10,
+                      //   height: 10,
+                      // ),
                     ),
                   ),
                   SizedBox(
