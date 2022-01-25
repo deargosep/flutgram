@@ -19,7 +19,7 @@ class ChatScreen extends HookWidget {
         .collection('Chats')
         .doc(id)
         .collection('messages')
-        .orderBy('at', descending: false)
+        .orderBy('at', descending: true)
         .snapshots();
 
     final messageController = useTextEditingController();
@@ -62,7 +62,9 @@ class ChatScreen extends HookWidget {
                 }
 
                 return ListView(
-                  // controller: _scrollController,
+                  reverse: true,
+                  shrinkWrap: true,
+                  controller: _scrollController,
                   children:
                       snapshot.data!.docs.map((DocumentSnapshot document) {
                     Map<String, dynamic> data =
@@ -79,11 +81,11 @@ class ChatScreen extends HookWidget {
                     //   // title: Text(data['text']),
                     //   // subtitle: Text(data['author']),
                     // );
-                    // _scrollController.animateTo(
-                    //   0.0,
-                    //   curve: Curves.easeOut,
-                    //   duration: const Duration(milliseconds: 300),
-                    // );
+                    _scrollController.animateTo(
+                      0.0,
+                      curve: Curves.easeOut,
+                      duration: const Duration(milliseconds: 300),
+                    );
 
                     return Message(
                       text: data['text'].toString(),
