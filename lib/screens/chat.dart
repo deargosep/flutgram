@@ -79,11 +79,11 @@ class ChatScreen extends HookWidget {
                     //   // title: Text(data['text']),
                     //   // subtitle: Text(data['author']),
                     // );
-                    _scrollController.animateTo(
-                      0.0,
-                      curve: Curves.easeOut,
-                      duration: const Duration(milliseconds: 300),
-                    );
+                    // _scrollController.animateTo(
+                    //   0.0,
+                    //   curve: Curves.easeOut,
+                    //   duration: const Duration(milliseconds: 300),
+                    // );
 
                     return Message(
                       text: data['text'].toString(),
