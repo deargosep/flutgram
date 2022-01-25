@@ -1,7 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutgram/components/drawer.dart';
 import 'package:flutgram/screens/auth.dart';
+import 'package:flutgram/screens/change_username.dart';
 import 'package:flutgram/screens/chat.dart';
+import 'package:flutgram/screens/chats.dart';
+import 'package:flutgram/screens/contacts.dart';
 import 'package:flutgram/screens/new_chat.dart';
+import 'package:flutgram/screens/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -15,10 +20,20 @@ void main() async {
   );
   runApp(GetMaterialApp(
     getPages: [
-      GetPage(name: '/', page: () => AuthScreen()),
-      GetPage(name: '/chats', page: () => Home()),
-      GetPage(name: '/chat', page: () => ChatScreen()),
+      GetPage(
+          name: '/', page: () => Home(), transition: Transition.noTransition),
+      GetPage(name: '/auth', page: () => AuthScreen()),
+      GetPage(name: '/chats', page: () => ChatsScreen()),
+      GetPage(
+          name: '/chat',
+          page: () => ChatScreen(),
+          showCupertinoParallax: false),
       GetPage(name: '/new_chat', page: () => NewChatScreen()),
+      GetPage(name: '/settings', page: () => SettingsScreen()),
+      GetPage(
+          name: '/settings/change_username',
+          page: () => ChangeUsernameScreen()),
+      GetPage(name: '/contacts', page: () => ContactsScreen()),
     ],
   ));
 }
@@ -28,34 +43,15 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-    firebaseAuth.authStateChanges().listen((User? user) {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
-        Get.offAllNamed('/');
+        Get.offAllNamed('/auth');
+      } else {
+        Get.offAllNamed('/chats');
       }
     });
-    void logout() {
-      Get.defaultDialog(
-          middleText: 'Log out?',
-          textConfirm: 'Yes',
-          textCancel: 'No',
-          onConfirm: () {
-            firebaseAuth.signOut();
-          });
-    }
-
-    void newChat() {
-      Get.toNamed('/new_chat');
-    }
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Chats'),
-        actions: [IconButton(onPressed: logout, icon: Icon(Icons.logout))],
-      ),
-      floatingActionButton:
-          FloatingActionButton(onPressed: newChat, child: Icon(Icons.add)),
-      body: Center(child: Chats()),
+    return Container(
+      color: Colors.white,
     );
   }
 }

@@ -69,19 +69,33 @@ class Chats extends StatelessWidget {
                 ],
               ),
               key: Key(id),
-              child: ListTile(
-                onTap: () {
-                  Get.toNamed('/chat', parameters: params);
-                },
-                title: Text(data['name']),
-                subtitle: Text(data['description']),
-                trailing: Container(
-                  decoration: BoxDecoration(
-                      color: isMine() ? Colors.blue : Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
-                  width: 10,
-                  height: 10,
-                ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ListTile(
+                      onTap: () {
+                        Get.toNamed('/chat', parameters: params);
+                      },
+                      title: Text(data['name']),
+                      subtitle: Text(data['description']),
+                      trailing: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20))),
+                        width: 10,
+                        height: 10,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    child: Container(
+                      color: isMine() ? Colors.red : Colors.white,
+                      width: 2,
+                      height: 70,
+                    ),
+                  )
+                ],
               ),
             );
           }).toList(),
