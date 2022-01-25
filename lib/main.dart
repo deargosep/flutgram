@@ -35,7 +35,13 @@ class Home extends StatelessWidget {
       }
     });
     void logout() {
-      firebaseAuth.signOut();
+      Get.defaultDialog(
+          middleText: 'Log out?',
+          textConfirm: 'Yes',
+          textCancel: 'No',
+          onConfirm: () {
+            firebaseAuth.signOut();
+          });
     }
 
     void newChat() {

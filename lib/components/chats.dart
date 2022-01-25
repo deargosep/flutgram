@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class Chats extends StatelessWidget {
   Chats({Key? key}) : super(key: key);
@@ -26,18 +28,61 @@ class Chats extends StatelessWidget {
             Map<String, dynamic> data =
                 document.data()! as Map<String, dynamic>;
             String id = document.id;
-
+            String ownerId = data['ownerId'].toString();
+            final uid = FirebaseAuth.instance.currentUser?.uid;
             if (data['name'] == '') {
               return Container();
             }
+            bool isMine() {
+              if (ownerId == uid.toString()) {
+                return true;
+              } else {
+                return false;
+              }
+            }
+
+            void deleteChat(context) {
+              Get.defaultDialog(
+                  textConfirm: 'Yes',
+                  textCancel: 'No',
+                  middleText: 'Are you sure you wanna delete this chat?',
+                  onConfirm: () {
+                    FirebaseFirestore.instance
+                        .collection('Chats')
+                        .doc(id)
+                        .delete();
+                    Get.back();
+                  });
+            }
 
             var params = {"id": id, "name": data['name'].toString()};
-            return ListTile(
-              onTap: () {
-                Get.toNamed('/chat', parameters: params);
-              },
-              title: Text(data['name']),
-              subtitle: Text(data['description']),
+            return Slidable(
+              enabled: isMine(),
+              endActionPane: ActionPane(
+                motion: const ScrollMotion(),
+                children: [
+                  SlidableAction(
+                      backgroundColor: Colors.red,
+                      label: 'Delete',
+                      icon: Icons.delete,
+                      onPressed: deleteChat)
+                ],
+              ),
+              key: Key(id),
+              child: ListTile(
+                onTap: () {
+                  Get.toNamed('/chat', parameters: params);
+                },
+                title: Text(data['name']),
+                subtitle: Text(data['description']),
+                trailing: Container(
+                  decoration: BoxDecoration(
+                      color: isMine() ? Colors.blue : Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(20))),
+                  width: 10,
+                  height: 10,
+                ),
+              ),
             );
           }).toList(),
         );
