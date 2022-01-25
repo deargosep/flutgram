@@ -22,14 +22,6 @@ class AuthScreen extends HookWidget {
       auth.value = !auth.value;
     }
 
-    firebaseAuth.authStateChanges().listen((User? user) {
-      if (user == null) {
-        print('User is currently signed out!');
-      } else {
-        Get.offAllNamed('/chats');
-      }
-    });
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Auth'),

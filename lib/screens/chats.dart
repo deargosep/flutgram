@@ -9,13 +9,6 @@ class ChatsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-    firebaseAuth.authStateChanges().listen((User? user) {
-      if (user == null) {
-        Get.offAllNamed('/auth');
-      }
-    });
-
     void newChat() {
       Get.toNamed('/new_chat');
     }

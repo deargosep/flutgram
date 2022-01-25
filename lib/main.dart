@@ -22,8 +22,14 @@ void main() async {
     getPages: [
       GetPage(
           name: '/', page: () => Home(), transition: Transition.noTransition),
-      GetPage(name: '/auth', page: () => AuthScreen()),
-      GetPage(name: '/chats', page: () => ChatsScreen()),
+      GetPage(
+          name: '/auth',
+          page: () => AuthScreen(),
+          transition: Transition.noTransition),
+      GetPage(
+          name: '/chats',
+          page: () => ChatsScreen(),
+          transition: Transition.noTransition),
       GetPage(
           name: '/chat',
           page: () => ChatScreen(),
