@@ -73,7 +73,7 @@ class ChatScreen extends HookWidget {
                       return Container();
                     }
 
-                    var params = {"id": id, "name": data['name'].toString()};
+                    // var params = {"id": id, "name": data['name'].toString()};
                     // return Container(
                     //   child: Text(data['text']),
                     //   // title: Text(data['text']),

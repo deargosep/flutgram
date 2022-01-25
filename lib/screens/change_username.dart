@@ -12,6 +12,15 @@ class ChangeUsernameScreen extends HookWidget {
     final name = useTextEditingController();
     void submit() {
       FirebaseAuth.instance.currentUser?.updateDisplayName(name.value.text);
+      var data = {"name": name.value.text};
+      final uid = FirebaseAuth.instance.currentUser?.uid;
+      var docId = '';
+      FirebaseFirestore.instance
+          .collection('Users')
+          .where('uid', isEqualTo: uid)
+          .get()
+          .then((value) => docId = value.docs.first.id);
+      FirebaseFirestore.instance.collection('Users').doc(docId).update(data);
       Get.back();
     }
 
