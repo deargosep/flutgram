@@ -28,13 +28,19 @@ class Chats extends StatelessWidget {
             Map<String, dynamic> data =
                 document.data()! as Map<String, dynamic>;
             String id = document.id;
-            String ownerId = data['ownerId'].toString();
             final uid = FirebaseAuth.instance.currentUser?.uid;
             if (data['name'] == '') {
               return Container();
             }
+            if (data['ownerId'] == null &&
+                (data['firstUser'] != uid && data['secondUser'] != uid)) {
+              return Container();
+            }
             bool isMine() {
-              if (ownerId == uid.toString()) {
+              if (data['ownerId'] == uid.toString()) {
+                return true;
+              } else if (data['firstUser'] == uid ||
+                  data['secondUser'] == uid) {
                 return true;
               } else {
                 return false;
@@ -77,7 +83,7 @@ class Chats extends StatelessWidget {
                         Get.toNamed('/chat', parameters: params);
                       },
                       title: Text(data['name']),
-                      subtitle: Text(data['description']),
+                      subtitle: Text(data['description'] ?? ''),
                       // trailing: Container(
                       //   decoration: BoxDecoration(
                       //       color: Colors.white,

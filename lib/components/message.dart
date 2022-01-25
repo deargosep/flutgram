@@ -36,7 +36,7 @@ class Message extends StatelessWidget {
             width: 300,
             child: Card(
               child: ListTile(
-                title: Text(text),
+                title: SelectableText(text),
                 subtitle: Text(author),
               ),
             ),

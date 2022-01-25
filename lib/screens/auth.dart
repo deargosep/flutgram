@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -24,7 +25,7 @@ class AuthScreen extends HookWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Auth'),
+        title: Text('${auth.value ? 'Auth' : 'Register'}'),
       ),
       body: Center(
           child: Column(
@@ -133,6 +134,13 @@ class RegisterForm extends HookWidget {
         } else if (e.code == 'wrong-password') {
           passwordError.value = 'Wrong password provided for that user.';
         }
+      } finally {
+        var data = {
+          "name": displayName.value.text,
+          "email": email.value.text,
+          "uid": FirebaseAuth.instance.currentUser?.uid
+        };
+        FirebaseFirestore.instance.collection('Users').add(data);
       }
     }
 

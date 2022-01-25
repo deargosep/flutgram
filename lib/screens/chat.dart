@@ -12,14 +12,19 @@ class ChatScreen extends HookWidget {
   Widget build(BuildContext context) {
     final title = Get.parameters['name'].toString();
     final id = Get.parameters['id'].toString();
+    final uid = Get.parameters['uid'].toString();
+    print(uid);
+    print(title);
     final Stream<QuerySnapshot> _chatStream = FirebaseFirestore.instance
         .collection('Chats')
         .doc(id)
         .collection('messages')
         .orderBy('at', descending: false)
         .snapshots();
+
     final messageController = useTextEditingController();
     final ScrollController _scrollController = ScrollController();
+
     void send() {
       final displayName = FirebaseAuth.instance.currentUser?.displayName;
       final email = FirebaseAuth.instance.currentUser?.email;
@@ -74,11 +79,11 @@ class ChatScreen extends HookWidget {
                     //   // title: Text(data['text']),
                     //   // subtitle: Text(data['author']),
                     // );
-                    // _scrollController.animateTo(
-                    //   0.0,
-                    //   curve: Curves.easeOut,
-                    //   duration: const Duration(milliseconds: 300),
-                    // );
+                    _scrollController.animateTo(
+                      0.0,
+                      curve: Curves.easeOut,
+                      duration: const Duration(milliseconds: 300),
+                    );
 
                     return Message(
                       text: data['text'].toString(),
@@ -92,12 +97,13 @@ class ChatScreen extends HookWidget {
           ),
           Container(
             decoration: BoxDecoration(color: Colors.white),
-            padding: EdgeInsets.fromLTRB(10, 8, 0, 8),
+            padding: EdgeInsets.fromLTRB(10, 8, 0, GetPlatform.isIOS ? 30 : 8),
             child: Row(
               children: [
                 Expanded(
                   child: TextFormField(
                     controller: messageController,
+                    autofocus: true,
                     onFieldSubmitted: (text) {
                       send();
                     },

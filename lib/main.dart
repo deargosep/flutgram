@@ -49,7 +49,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    FirebaseAuth.instance.authStateChanges().listen((user) {
       if (user == null) {
         Get.offAllNamed('/auth');
       } else {
