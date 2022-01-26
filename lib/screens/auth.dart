@@ -72,6 +72,7 @@ class AuthForm extends HookWidget {
       child: Column(
         children: [
           TextFormField(
+            keyboardType: TextInputType.emailAddress,
             autocorrect: false,
             controller: email,
             decoration: InputDecoration(label: Text('Email')),
@@ -152,6 +153,7 @@ class RegisterForm extends HookWidget {
             decoration: InputDecoration(label: Text('Name')),
           ),
           TextFormField(
+            keyboardType: TextInputType.emailAddress,
             autocorrect: false,
             controller: email,
             decoration: InputDecoration(label: Text('Email')),

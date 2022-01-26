@@ -62,56 +62,66 @@ class ChatScreen extends HookWidget {
                   return Container();
                 }
 
-                return ListView(
-                  reverse: true,
-                  shrinkWrap: true,
-                  controller: _scrollController,
-                  children:
-                      snapshot.data!.docs.map((DocumentSnapshot document) {
-                    Map<String, dynamic> data =
-                        document.data()! as Map<String, dynamic>;
-                    // String id = document.id;
+                return GestureDetector(
+                  onTap: () {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                  },
+                  onHorizontalDragEnd: (details) {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                  },
+                  child: ListView(
+                    reverse: true,
+                    shrinkWrap: true,
+                    controller: _scrollController,
+                    children:
+                        snapshot.data!.docs.map((DocumentSnapshot document) {
+                      Map<String, dynamic> data =
+                          document.data()! as Map<String, dynamic>;
+                      // String id = document.id;
 
-                    final Timestamp timestamp = data['at'] as Timestamp;
-                    final DateTime dateTime = timestamp.toDate();
-                    final dateString = DateFormat('H:mm').format(dateTime);
+                      final Timestamp timestamp = data['at'] as Timestamp;
+                      final DateTime dateTime = timestamp.toDate();
+                      final dateString = DateFormat('H:mm').format(dateTime);
 
-                    if (data['name'] == '') {
-                      return Container();
-                    }
+                      if (data['name'] == '') {
+                        return Container();
+                      }
 
-                    // var params = {"id": id, "name": data['name'].toString()};
-                    // return Container(
-                    //   child: Text(data['text']),
-                    //   // title: Text(data['text']),
-                    //   // subtitle: Text(data['author']),
-                    // );
-                    try {
-                      _scrollController.animateTo(
-                        0.0,
-                        curve: Curves.easeOut,
-                        duration: const Duration(milliseconds: 300),
-                      );
-                    } catch (e) {}
+                      // var params = {"id": id, "name": data['name'].toString()};
+                      // return Container(
+                      //   child: Text(data['text']),
+                      //   // title: Text(data['text']),
+                      //   // subtitle: Text(data['author']),
+                      // );
+                      try {
+                        _scrollController.animateTo(
+                          0.0,
+                          curve: Curves.easeOut,
+                          duration: const Duration(milliseconds: 300),
+                        );
+                      } catch (e) {}
 
-                    return Message(
-                        text: data['text'].toString(),
-                        author: data['author'].toString(),
-                        authorId: data['authorId'].toString(),
-                        time: dateString,
-                        isPrivate: isPrivate == 'true' ? true : false);
-                  }).toList(),
+                      return Message(
+                          text: data['text'].toString(),
+                          author: data['author'].toString(),
+                          authorId: data['authorId'].toString(),
+                          time: dateString,
+                          isPrivate: isPrivate == 'true' ? true : false);
+                    }).toList(),
+                  ),
                 );
               },
             ),
           ),
           Container(
             decoration: BoxDecoration(color: Colors.white),
-            padding: EdgeInsets.fromLTRB(10, 8, 0, GetPlatform.isIOS ? 30 : 8),
+            padding: EdgeInsets.fromLTRB(10, 8, 0, GetPlatform.isIOS ? 20 : 8),
             child: Row(
               children: [
                 Expanded(
                   child: TextFormField(
+                    keyboardType: TextInputType.text,
+                    textCapitalization: TextCapitalization.sentences,
                     controller: messageController,
                     autofocus: true,
                     onFieldSubmitted: (text) {

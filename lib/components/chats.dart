@@ -33,13 +33,16 @@ class Chats extends StatelessWidget {
               return Container();
             }
             if (data['ownerId'] == null &&
-                (data['firstUser'] != uid && data['secondUser'] != uid)) {
+                (!id.contains(uid.toString()) &&
+                    data['firstUser'] != uid.toString() &&
+                    data['secondUser'] != uid.toString())) {
               return Container();
             }
             bool isMine() {
               if (data['ownerId'] == uid.toString()) {
                 return true;
-              } else if (data['firstUser'] == uid ||
+              } else if (id.contains(uid.toString()) ||
+                  data['firstUser'] == uid ||
                   data['secondUser'] == uid) {
                 return true;
               } else {

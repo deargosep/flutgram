@@ -18,7 +18,8 @@ class NewChatScreen extends HookWidget {
         "name": name.value.text,
         "description": description.value.text,
         "ownerId": ownerId,
-        "ownerName": ownerName
+        "ownerName": ownerName,
+        "private": false
       };
       FirebaseFirestore.instance.collection('Chats').add(data);
       Get.back();
