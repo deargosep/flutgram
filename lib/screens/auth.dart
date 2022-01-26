@@ -74,6 +74,7 @@ class AuthForm extends HookWidget {
           TextFormField(
             keyboardType: TextInputType.emailAddress,
             autocorrect: false,
+            autofocus: true,
             controller: email,
             decoration: InputDecoration(label: Text('Email')),
           ),
@@ -94,7 +95,11 @@ class AuthForm extends HookWidget {
             passwordError.value,
             style: TextStyle(color: Colors.red),
           ),
-          TextButton(onPressed: submit, child: Text('Submit'))
+          MaterialButton(
+              textColor: Colors.white,
+              color: Colors.blue,
+              onPressed: submit,
+              child: Text('Login'))
         ],
       ),
     );
@@ -135,12 +140,14 @@ class RegisterForm extends HookWidget {
           passwordError.value = 'Wrong password provided for that user.';
         }
       } finally {
-        var data = {
-          "name": displayName.value.text,
-          "email": email.value.text,
-          "uid": FirebaseAuth.instance.currentUser?.uid
-        };
-        FirebaseFirestore.instance.collection('Users').add(data);
+        if (FirebaseAuth.instance.currentUser != null) {
+          var data = {
+            "name": displayName.value.text,
+            "email": email.value.text,
+            "uid": FirebaseAuth.instance.currentUser?.uid
+          };
+          FirebaseFirestore.instance.collection('Users').add(data);
+        }
       }
     }
 
@@ -149,6 +156,9 @@ class RegisterForm extends HookWidget {
       child: Column(
         children: [
           TextFormField(
+            autofocus: true,
+            keyboardType: TextInputType.text,
+            textCapitalization: TextCapitalization.words,
             controller: displayName,
             decoration: InputDecoration(label: Text('Name')),
           ),
@@ -175,7 +185,11 @@ class RegisterForm extends HookWidget {
             passwordError.value,
             style: TextStyle(color: Colors.red),
           ),
-          TextButton(onPressed: submit, child: Text('Submit'))
+          MaterialButton(
+              textColor: Colors.white,
+              color: Colors.blue,
+              onPressed: submit,
+              child: Text('Register'))
         ],
       ),
     );
