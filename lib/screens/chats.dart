@@ -13,10 +13,6 @@ class ChatsScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      drawer: ProfileDrawer(),
-      appBar: AppBar(
-        title: Text('Chats'),
-      ),
       floatingActionButton:
           FloatingActionButton(onPressed: newChat, child: Icon(Icons.add)),
       body: Center(child: Chats()),

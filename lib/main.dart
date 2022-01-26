@@ -6,6 +6,9 @@ import 'package:flutgram/screens/chats.dart';
 import 'package:flutgram/screens/contacts.dart';
 import 'package:flutgram/screens/new_chat.dart';
 import 'package:flutgram/screens/settings.dart';
+import 'package:flutgram/screens/tabs.dart';
+import 'package:flutgram/screens/upload.dart';
+import 'package:flutgram/screens/upload_details.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,6 +28,10 @@ void main() async {
           page: () => AuthScreen(),
           transition: Transition.noTransition),
       GetPage(
+          name: '/tabs',
+          page: () => TabScreen(),
+          transition: Transition.noTransition),
+      GetPage(
           name: '/chats',
           page: () => ChatsScreen(),
           transition: Transition.noTransition),
@@ -38,6 +45,8 @@ void main() async {
           name: '/settings/change_username',
           page: () => ChangeUsernameScreen()),
       GetPage(name: '/contacts', page: () => ContactsScreen()),
+      GetPage(name: '/upload', page: () => UploadScreen()),
+      GetPage(name: '/upload/details', page: () => UploadDetailsScreen()),
     ],
   ));
 }
@@ -51,7 +60,7 @@ class Home extends StatelessWidget {
       if (user == null) {
         Get.offAllNamed('/auth');
       } else {
-        Get.offAllNamed('/chats');
+        Get.offAllNamed('/tabs');
       }
     });
     return Container(

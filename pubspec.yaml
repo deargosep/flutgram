@@ -40,6 +40,13 @@ dependencies:
   firebase_auth: ^3.3.5
   flutter_slidable: ^1.2.0
   firestore_search: ^0.1.9
+  image_picker: ^0.8.4+5
+  firebase_storage: ^10.2.5
+  photo_gallery: ^1.1.1
+  permission_handler: ^8.3.0
+  video_player: ^2.2.15
+  transparent_image: ^2.0.0
+  path: ^1.8.0
 
 dev_dependencies:
   flutter_test:
