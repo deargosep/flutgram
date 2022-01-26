@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class ChatScreen extends HookWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -13,8 +14,8 @@ class ChatScreen extends HookWidget {
     final title = Get.parameters['name'].toString();
     final id = Get.parameters['id'].toString();
     final uid = Get.parameters['uid'].toString();
-    print(uid);
-    print(title);
+    final isPrivate = Get.parameters['isPrivate'].toString();
+
     final Stream<QuerySnapshot> _chatStream = FirebaseFirestore.instance
         .collection('Chats')
         .doc(id)
@@ -69,7 +70,11 @@ class ChatScreen extends HookWidget {
                       snapshot.data!.docs.map((DocumentSnapshot document) {
                     Map<String, dynamic> data =
                         document.data()! as Map<String, dynamic>;
-                    String id = document.id;
+                    // String id = document.id;
+
+                    final Timestamp timestamp = data['at'] as Timestamp;
+                    final DateTime dateTime = timestamp.toDate();
+                    final dateString = DateFormat('H:mm').format(dateTime);
 
                     if (data['name'] == '') {
                       return Container();
@@ -81,17 +86,20 @@ class ChatScreen extends HookWidget {
                     //   // title: Text(data['text']),
                     //   // subtitle: Text(data['author']),
                     // );
-                    _scrollController.animateTo(
-                      0.0,
-                      curve: Curves.easeOut,
-                      duration: const Duration(milliseconds: 300),
-                    );
+                    try {
+                      _scrollController.animateTo(
+                        0.0,
+                        curve: Curves.easeOut,
+                        duration: const Duration(milliseconds: 300),
+                      );
+                    } catch (e) {}
 
                     return Message(
-                      text: data['text'].toString(),
-                      author: data['author'].toString(),
-                      authorId: data['authorId'].toString(),
-                    );
+                        text: data['text'].toString(),
+                        author: data['author'].toString(),
+                        authorId: data['authorId'].toString(),
+                        time: dateString,
+                        isPrivate: isPrivate == 'true' ? true : false);
                   }).toList(),
                 );
               },

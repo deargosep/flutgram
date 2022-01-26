@@ -9,7 +9,7 @@ class AuthScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    // FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     final auth = useState(true);
     Widget getForm() {
       if (auth.value) {
@@ -56,9 +56,8 @@ class AuthForm extends HookWidget {
     void submit() async {
       validate();
       try {
-        UserCredential userCredential = await FirebaseAuth.instance
-            .signInWithEmailAndPassword(
-                email: email.value.text, password: password.value.text);
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: email.value.text, password: password.value.text);
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           emailError.value = 'No user found for that email.';

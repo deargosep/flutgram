@@ -47,6 +47,14 @@ class Chats extends StatelessWidget {
               }
             }
 
+            bool isPrivate() {
+              if (data['private'] == true) {
+                return true;
+              } else {
+                return false;
+              }
+            }
+
             void deleteChat(context) {
               Get.defaultDialog(
                   textConfirm: 'Yes',
@@ -61,7 +69,11 @@ class Chats extends StatelessWidget {
                   });
             }
 
-            var params = {"id": id, "name": data['name'].toString()};
+            var params = {
+              "id": id,
+              "name": data['name'].toString(),
+              "isPrivate": isPrivate() ? 'true' : 'false'
+            };
             return Slidable(
               enabled: isMine(),
               endActionPane: ActionPane(

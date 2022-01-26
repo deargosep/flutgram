@@ -25,7 +25,7 @@ class SettingsScreen extends StatelessWidget {
 }
 
 class SettingsItem extends StatelessWidget {
-  String title;
+  final String title;
 
   final VoidCallback? onTap;
 

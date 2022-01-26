@@ -30,30 +30,34 @@ class ContactsScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     void goToUser(uid, name) async {
-      var currName = FirebaseAuth.instance.currentUser?.displayName;
-      var currUid = FirebaseAuth.instance.currentUser?.uid;
-
+      var myName = FirebaseAuth.instance.currentUser?.displayName;
+      var myUid = FirebaseAuth.instance.currentUser?.uid;
+      List listOfUids = [myUid, uid];
+      listOfUids.sort((a, b) => a.compareTo(b));
+      String newId = '${listOfUids[0]}-${listOfUids[1]}';
       var data = {
         "private": true,
-        "name": '${currName} and ${name}',
-        "firstUser": currUid,
+        "name": '${myName} and ${name}',
+        "description": 'Private chat',
+        "firstUser": myUid,
         "secondUser": uid
       };
 
       await FirebaseFirestore.instance
           .collection('Chats')
-          .doc('${currUid}-${uid}')
+          .doc('${newId}')
           .set(data);
 
       final chat = await FirebaseFirestore.instance
           .collection('Chats')
-          .doc('${currUid}-${uid}');
+          .doc('${myUid}-${uid}');
       final doc = await chat.get();
 
       var params = {
         "uid": uid.toString(),
         "name": doc.data()!["name"].toString(),
-        "id": chat.id
+        "id": chat.id,
+        "isPrivate": 'true'
       };
 
       Get.offAndToNamed('chat', parameters: params);

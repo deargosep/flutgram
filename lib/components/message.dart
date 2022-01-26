@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -6,12 +7,15 @@ class Message extends StatelessWidget {
       {Key? key,
       required String this.text,
       required String this.author,
-      required String this.authorId})
+      required String this.authorId,
+      required String this.time,
+      required bool this.isPrivate})
       : super(key: key);
-  String authorId;
-  String text;
-  String author;
-
+  final String authorId;
+  final String text;
+  final String author;
+  final String time;
+  final bool isPrivate;
   @override
   Widget build(BuildContext context) {
     if (text == "") {
@@ -37,7 +41,8 @@ class Message extends StatelessWidget {
             child: Card(
               child: ListTile(
                 title: SelectableText(text),
-                subtitle: Text(author),
+                subtitle: isPrivate ? null : Text(author),
+                trailing: Text('${time}'),
               ),
             ),
           ),

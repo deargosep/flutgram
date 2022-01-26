@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutgram/components/drawer.dart';
 import 'package:flutgram/screens/auth.dart';
 import 'package:flutgram/screens/change_username.dart';
 import 'package:flutgram/screens/chat.dart';
@@ -10,7 +9,6 @@ import 'package:flutgram/screens/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'components/chats.dart';
 import 'firebase_options.dart';
 
 void main() async {

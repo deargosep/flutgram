@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutgram/components/chats.dart';
 import 'package:flutgram/components/drawer.dart';
 import 'package:flutter/material.dart';
