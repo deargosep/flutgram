@@ -39,6 +39,7 @@ class ContactsScreen extends HookWidget {
         "private": true,
         "name": '${myName} and ${name}',
         "description": 'Private chat',
+        "users": [myUid, uid],
         "firstUser": myUid,
         "secondUser": uid
       };

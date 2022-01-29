@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pinch_zoom/pinch_zoom.dart';
 
 class FeedScreen extends StatelessWidget {
   FeedScreen({Key? key}) : super(key: key);
@@ -26,7 +27,7 @@ class FeedScreen extends StatelessWidget {
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           }
 
           return ListView(
@@ -36,14 +37,63 @@ class FeedScreen extends StatelessWidget {
 
             String id = document.id;
             final uid = FirebaseAuth.instance.currentUser?.uid;
+            bool liked() {
+              if (data['likedBy'] != null && data['likedBy'].contains(uid)) {
+                return true;
+              } else {
+                return false;
+              }
+            }
+
+            void like() {
+              if (data['likedBy'] != null && data['likedBy'].contains(uid)) {
+                List likes = data['likedBy'];
+                likes.removeWhere((item) => item == uid);
+                FirebaseFirestore.instance
+                    .collection('Feed')
+                    .doc(id)
+                    .update({"likedBy": likes});
+              } else if (data['likedBy'] != null) {
+                List likes = data['likedBy'];
+                likes.add(uid);
+                FirebaseFirestore.instance
+                    .collection('Feed')
+                    .doc(id)
+                    .update({"likedBy": likes});
+              } else {
+                List likes = [];
+                likes.add(uid);
+                FirebaseFirestore.instance
+                    .collection('Feed')
+                    .doc(id)
+                    .update({"likedBy": likes});
+              }
+            }
+
             return Card(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Center(child: Image.network(data['imageUrl'])),
                   Container(
-                    padding: EdgeInsets.fromLTRB(20, 0, 0, 20),
+                    height: 300,
+                    width: MediaQuery.of(context).size.width,
+                    child: Image.network(
+                      data['imageUrl'],
+                      fit: BoxFit.contain,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        }
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
                           height: 30,
@@ -63,9 +113,32 @@ class FeedScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Icon(
-                    Icons.favorite,
-                    color: Colors.blue,
+                  Divider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          data['likedBy']?.length.toString() ?? '${0}',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 8, 10, 8),
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: IconButton(
+                            onPressed: like,
+                            icon: Icon(liked()
+                                ? Icons.favorite
+                                : Icons.favorite_outline),
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ),
+                    ],
                   )
                 ],
               ),

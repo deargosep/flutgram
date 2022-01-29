@@ -47,6 +47,7 @@ dependencies:
   video_player: ^2.2.15
   transparent_image: ^2.0.0
   path: ^1.8.0
+  pinch_zoom: ^1.0.0
 
 dev_dependencies:
   flutter_test:
