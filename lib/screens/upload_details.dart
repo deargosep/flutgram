@@ -82,7 +82,7 @@ class _UploadDetailsScreenState extends State<UploadDetailsScreen> {
         title: Text('Details'),
       ),
       body: loading
-          ? CircularProgressIndicator()
+          ? Center(child: CircularProgressIndicator())
           : GestureDetector(
               onTap: () {
                 FocusManager.instance.primaryFocus?.unfocus();

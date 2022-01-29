@@ -71,6 +71,10 @@ class FeedScreen extends StatelessWidget {
               }
             }
 
+            void deletePost() {
+              FirebaseFirestore.instance.collection('Feed').doc(id).delete();
+            }
+
             return Card(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,26 +121,35 @@ class FeedScreen extends StatelessWidget {
                   ),
                   Divider(),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          data['likedBy']?.length.toString() ?? '${0}',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: IconButton(
+                          onPressed:
+                              data['authorUid'] == uid ? deletePost : null,
+                          icon: Icon(Icons.delete),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 8, 10, 8),
                         child: Align(
                           alignment: Alignment.topRight,
-                          child: IconButton(
-                            onPressed: like,
-                            icon: Icon(liked()
-                                ? Icons.favorite
-                                : Icons.favorite_outline),
-                            color: Colors.blue,
+                          child: Row(
+                            children: [
+                              Text(
+                                data['likedBy']?.length.toString() ?? '${0}',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                              IconButton(
+                                onPressed: like,
+                                icon: Icon(liked()
+                                    ? Icons.favorite
+                                    : Icons.favorite_outline),
+                                color: Colors.blue,
+                              ),
+                            ],
                           ),
                         ),
                       ),
