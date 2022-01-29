@@ -11,9 +11,12 @@ class TabScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final selectedIndex = useState(0);
-    if (Get.parameters['tabs'] != null) {
-      selectedIndex.value = int.parse(Get.parameters['tabs'].toString());
-    }
+    useEffect(() {
+      if (Get.parameters['tabs'] != null) {
+        selectedIndex.value = int.parse(Get.parameters['tabs'].toString());
+      }
+      return () {};
+    }, []);
     final List<BottomNavigationBarItem> tabs = [
       BottomNavigationBarItem(
         icon: Icon(Icons.send),

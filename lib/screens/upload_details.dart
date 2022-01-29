@@ -111,11 +111,17 @@ class _UploadDetailsScreenState extends State<UploadDetailsScreen> {
                     child: Column(
                       children: [
                         TextFormField(
+                          textCapitalization: TextCapitalization.sentences,
+                          autocorrect: true,
+                          keyboardType: TextInputType.text,
                           controller: title,
                           autofocus: true,
                           decoration: InputDecoration(label: Text('Title')),
                         ),
                         TextFormField(
+                          textCapitalization: TextCapitalization.sentences,
+                          autocorrect: true,
+                          keyboardType: TextInputType.text,
                           controller: description,
                           decoration:
                               InputDecoration(label: Text('Description')),

@@ -44,7 +44,7 @@ class Chats extends StatelessWidget {
               } else if (id.contains(uid.toString()) ||
                   data['firstUser'] == uid ||
                   data['secondUser'] == uid ||
-                  data['users'].contains(uid)) {
+                  (data['users'] != null && data['users']?.contains(uid))) {
                 return true;
               } else {
                 return false;

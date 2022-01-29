@@ -72,7 +72,17 @@ class FeedScreen extends StatelessWidget {
             }
 
             void deletePost() {
-              FirebaseFirestore.instance.collection('Feed').doc(id).delete();
+              Get.defaultDialog(
+                  middleText: 'Delete post?',
+                  textCancel: 'No',
+                  textConfirm: 'Yes',
+                  onConfirm: () {
+                    FirebaseFirestore.instance
+                        .collection('Feed')
+                        .doc(id)
+                        .delete();
+                    Get.back();
+                  });
             }
 
             return Card(
