@@ -6,8 +6,10 @@ import 'package:get/get.dart';
 class FeedScreen extends StatelessWidget {
   FeedScreen({Key? key}) : super(key: key);
 
-  final Stream<QuerySnapshot> _feedStream =
-      FirebaseFirestore.instance.collection('Feed').snapshots();
+  final Stream<QuerySnapshot> _feedStream = FirebaseFirestore.instance
+      .collection('Feed')
+      .orderBy('at', descending: true)
+      .snapshots();
 
   @override
   Widget build(BuildContext context) {
