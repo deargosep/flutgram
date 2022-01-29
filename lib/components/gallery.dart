@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_gallery/photo_gallery.dart';
@@ -184,8 +183,9 @@ class AlbumPageState extends State<AlbumPage> {
         children: <Widget>[
           ...?_media?.map((medium) {
             return GestureDetector(
-              onTap: () {
-                Get.toNamed('/upload/details', arguments: {"file": medium});
+              onTap: () async {
+                var file = await medium.getFile();
+                Get.toNamed('/upload/details', arguments: {"file": file});
               },
               // onTap: () => Get.to(() => ViewerPage(medium)),
               child: Container(
@@ -287,7 +287,7 @@ class _VideoProviderState extends State<VideoProvider> {
                 aspectRatio: _controller!.value.aspectRatio,
                 child: VideoPlayer(_controller!),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   setState(() {
                     _controller!.value.isPlaying

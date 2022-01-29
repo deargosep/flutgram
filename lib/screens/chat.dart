@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutgram/components/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 class ChatScreen extends HookWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -15,6 +17,14 @@ class ChatScreen extends HookWidget {
     final id = Get.parameters['id'].toString();
     final uid = Get.parameters['uid'].toString();
     final isPrivate = Get.parameters['isPrivate'].toString();
+    void subscribe() async {
+      await FirebaseMessaging.instance.subscribeToTopic(id);
+      http.post(Uri.parse('localhost:3000/'), body: {"topic": id});
+    }
+
+    if (isPrivate == 'true' && id.contains(uid)) {
+      subscribe();
+    }
 
     final Stream<QuerySnapshot> _chatStream = FirebaseFirestore.instance
         .collection('Chats')

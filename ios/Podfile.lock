@@ -11,6 +11,9 @@ PODS:
   - Firebase/Firestore (8.10.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 8.10.0)
+  - Firebase/Messaging (8.10.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (~> 8.10.0)
   - Firebase/Storage (8.10.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 8.10.0)
@@ -20,6 +23,10 @@ PODS:
     - Flutter
   - firebase_core (1.11.0):
     - Firebase/CoreOnly (= 8.10.0)
+    - Flutter
+  - firebase_messaging (11.2.6):
+    - Firebase/Messaging (= 8.10.0)
+    - firebase_core
     - Flutter
   - firebase_storage (10.2.5):
     - Firebase/Storage (= 8.10.0)
@@ -47,6 +54,20 @@ PODS:
   - FirebaseFirestore/Base (8.10.0)
   - FirebaseFirestore/WithLeveldb (8.10.0):
     - FirebaseFirestore/Base
+  - FirebaseInstallations (8.10.0):
+    - FirebaseCore (~> 8.0)
+    - GoogleUtilities/Environment (~> 7.6)
+    - GoogleUtilities/UserDefaults (~> 7.6)
+    - PromisesObjC (< 3.0, >= 1.2)
+  - FirebaseMessaging (8.10.0):
+    - FirebaseCore (~> 8.0)
+    - FirebaseInstallations (~> 8.0)
+    - GoogleDataTransport (~> 9.1)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.6)
+    - GoogleUtilities/Environment (~> 7.6)
+    - GoogleUtilities/Reachability (~> 7.6)
+    - GoogleUtilities/UserDefaults (~> 7.6)
+    - nanopb (~> 2.30908.0)
   - FirebaseStorage (8.10.0):
     - FirebaseCore (~> 8.0)
     - GTMSessionFetcher/Core (~> 1.5)
@@ -70,6 +91,8 @@ PODS:
   - "GoogleUtilities/NSData+zlib (7.6.0)"
   - GoogleUtilities/Reachability (7.6.0):
     - GoogleUtilities/Logger
+  - GoogleUtilities/UserDefaults (7.6.0):
+    - GoogleUtilities/Logger
   - GTMSessionFetcher/Core (1.7.0)
   - image_picker (0.0.1):
     - Flutter
@@ -92,6 +115,7 @@ DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
+  - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - FirebaseFirestore (from `https://github.com/invertase/firestore-ios-sdk-frameworks.git`, tag `8.10.0`)
   - Flutter (from `Flutter`)
@@ -107,6 +131,8 @@ SPEC REPOS:
     - FirebaseAuth
     - FirebaseCore
     - FirebaseCoreDiagnostics
+    - FirebaseInstallations
+    - FirebaseMessaging
     - FirebaseStorage
     - GoogleDataTransport
     - GoogleUtilities
@@ -121,6 +147,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
+  firebase_messaging:
+    :path: ".symlinks/plugins/firebase_messaging/ios"
   firebase_storage:
     :path: ".symlinks/plugins/firebase_storage/ios"
   FirebaseFirestore:
@@ -149,11 +177,14 @@ SPEC CHECKSUMS:
   Firebase: 44213362f1dcc52555b935dc925ed35ac55f1b20
   firebase_auth: 9d959bddc3b255ddfb67cf630a5bbb6186964356
   firebase_core: 2ca2d6cc8a11693e701b37126afae4800be5dbac
+  firebase_messaging: 3030e108ab53ab1ece7af45d0a0d185386a8f760
   firebase_storage: 740e81d4bef3360d50447dda37da9b8914a2acc0
   FirebaseAuth: 59a2d2b933b5b79e18fb1e6ad230c6abdaa73d26
   FirebaseCore: 04186597c095da37d90ff9fd3e53bc61a1ff2440
   FirebaseCoreDiagnostics: 56fb7216d87e0e6ec2feddefa9d8a392fe8b2c18
   FirebaseFirestore: 59f8b4382e214b21af226875bd2cf85b84d9af11
+  FirebaseInstallations: 830327b45345ffc859eaa9c17bcd5ae893fd5425
+  FirebaseMessaging: b0aeba17332ee1ee610662b4d1e02a86db82f08f
   FirebaseStorage: 815410224b548172c578f02554a86bbc8f817f50
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940

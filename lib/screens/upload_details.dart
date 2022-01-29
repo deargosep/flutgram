@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,12 +13,15 @@ class UploadDetailsScreen extends StatefulWidget {
 }
 
 class _UploadDetailsScreenState extends State<UploadDetailsScreen> {
-  late File file;
+  var file;
   var loading = true;
   TextEditingController title = TextEditingController();
   TextEditingController description = TextEditingController();
   @override
   initState() {
+    setState(() {
+      loading = true;
+    });
     var arg = Get.arguments['file'];
     if (arg.runtimeType == 'Medium') {
       arg.getFile().then((File val) {
@@ -28,6 +29,7 @@ class _UploadDetailsScreenState extends State<UploadDetailsScreen> {
           file = val;
           loading = false;
         });
+        print(file.runtimeType);
       });
     } else {
       setState(() {
