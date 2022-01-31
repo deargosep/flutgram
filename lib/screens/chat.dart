@@ -1,30 +1,71 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutgram/components/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
+import 'dart:async';
 
 class ChatScreen extends HookWidget {
   const ChatScreen({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
+    final messageController = TextEditingController();
+    final ScrollController _scrollController = ScrollController();
+
+    final typing = useState(false);
+
     final title = Get.parameters['name'].toString();
     final id = Get.parameters['id'].toString();
-    final uid = Get.parameters['uid'].toString();
+    // final uid = Get.parameters['uid'].toString();
+    final uid = FirebaseAuth.instance.currentUser?.uid;
     final isPrivate = Get.parameters['isPrivate'].toString();
-    void subscribe() async {
-      await FirebaseMessaging.instance.subscribeToTopic(id);
-      http.post(Uri.parse('localhost:3000/'), body: {"topic": id});
+
+    Future<bool> getTyping() async {
+      final typing =
+          await FirebaseFirestore.instance.collection('Chats').doc(id).get();
+      if (typing.data()!.containsKey('key') && typing.data()!['typing']) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
-    if (isPrivate == 'true' && id.contains(uid)) {
-      subscribe();
+    Stream typingStream = getTyping().asStream();
+
+    typingStream.listen((event) {
+      typing.value = event;
+    });
+    Timer searchOnStoppedTyping = Timer(Duration.zero, () {});
+
+    search(value) {
+      print('hello world from search . the value is $value');
     }
+
+    _onChangeHandler(value) {
+      const duration = Duration(
+          milliseconds:
+              800); // set the duration that you want call search() after that.
+      if (searchOnStoppedTyping != null) {
+        searchOnStoppedTyping.cancel(); // clear timer
+        FirebaseFirestore.instance
+            .collection('Chats')
+            .doc(id)
+            .update({"typing": true, "typer": uid});
+      }
+
+      searchOnStoppedTyping = new Timer(duration, () => search(value));
+      FirebaseFirestore.instance
+          .collection('Chats')
+          .doc(id)
+          .update({"typing": false});
+    }
+
+    // void subscribe() async {
+    //   await FirebaseMessaging.instance.subscribeToTopic(id);
+    // http.post(Uri.parse('localhost:3000/'), body: {"topic": id});
+    // }
 
     final Stream<QuerySnapshot> _chatStream = FirebaseFirestore.instance
         .collection('Chats')
@@ -33,8 +74,8 @@ class ChatScreen extends HookWidget {
         .orderBy('at', descending: true)
         .snapshots();
 
-    final messageController = useTextEditingController();
-    final ScrollController _scrollController = ScrollController();
+    final Stream<DocumentSnapshot> _chatDocStream =
+        FirebaseFirestore.instance.collection('Chats').doc(id).snapshots();
 
     void send() {
       final displayName = FirebaseAuth.instance.currentUser?.displayName;
@@ -46,11 +87,11 @@ class ChatScreen extends HookWidget {
           .collection('messages')
           .add({
         "at": Timestamp.now(),
-        "text": messageController.value.text,
+        "text": messageController.text,
         "author": displayName ?? email,
         "authorId": userId
       });
-      messageController.value = TextEditingValue.empty;
+      messageController.clear();
     }
 
     return Scaffold(
@@ -59,6 +100,7 @@ class ChatScreen extends HookWidget {
         title: Text(title),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
@@ -103,13 +145,13 @@ class ChatScreen extends HookWidget {
                       //   // title: Text(data['text']),
                       //   // subtitle: Text(data['author']),
                       // );
-                      try {
-                        _scrollController.animateTo(
-                          0.0,
-                          curve: Curves.easeOut,
-                          duration: const Duration(milliseconds: 300),
-                        );
-                      } catch (e) {}
+                      // try {
+                      //   _scrollController.animateTo(
+                      //     0.0,
+                      //     curve: Curves.easeOut,
+                      //     duration: const Duration(milliseconds: 300),
+                      //   );
+                      // } catch (e) {}
 
                       return Message(
                           text: data['text'].toString(),
@@ -123,6 +165,27 @@ class ChatScreen extends HookWidget {
               },
             ),
           ),
+          StreamBuilder<DocumentSnapshot>(
+              stream: _chatDocStream,
+              builder: (context, snapshot) {
+                final data = snapshot.data;
+                Map<String, dynamic> json =
+                    data?.data() as Map<String, dynamic>;
+                if (json['typing'] != null &&
+                    json['typing'] &&
+                    json['typer'] != uid) {
+                  return Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      'Typing...',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w500),
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              }),
           Container(
             decoration: BoxDecoration(color: Colors.white),
             padding: EdgeInsets.fromLTRB(10, 8, 0, GetPlatform.isIOS ? 20 : 8),
@@ -134,9 +197,8 @@ class ChatScreen extends HookWidget {
                     textCapitalization: TextCapitalization.sentences,
                     controller: messageController,
                     autofocus: true,
-                    onFieldSubmitted: (text) {
-                      send();
-                    },
+                    onChanged: _onChangeHandler,
+                    onFieldSubmitted: (text) => send(),
                   ),
                 ),
                 IconButton(

@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -78,6 +79,11 @@ class Chats extends StatelessWidget {
               "name": data['name'].toString(),
               "isPrivate": isPrivate() ? 'true' : 'false'
             };
+            void goToChat() {
+              FirebaseMessaging.instance.subscribeToTopic(id);
+              Get.toNamed('/chat', parameters: params);
+            }
+
             return Slidable(
               enabled: isMine(),
               endActionPane: ActionPane(
@@ -95,9 +101,7 @@ class Chats extends StatelessWidget {
                 children: [
                   Expanded(
                     child: ListTile(
-                      onTap: () {
-                        Get.toNamed('/chat', parameters: params);
-                      },
+                      onTap: goToChat,
                       title: Text(data['name']),
                       subtitle: Text(data['description'] ?? ''),
                       // trailing: Container(
