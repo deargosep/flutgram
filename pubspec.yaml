@@ -50,6 +50,8 @@ dependencies:
   pinch_zoom: ^1.0.0
   firebase_messaging: ^11.2.6
   http: ^0.13.4
+  just_audio: ^0.9.18
+  audio_video_progress_bar: ^0.10.0
 
 dev_dependencies:
   flutter_test:
